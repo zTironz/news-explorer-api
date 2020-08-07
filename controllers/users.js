@@ -39,10 +39,8 @@ module.exports.createUser = (req, res, next) => {
       name: user.name, email: user.email,
     }))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new UniqueError(`Данные некорректны: ${err.message}`));
-      } else {
-        next(err);
+      if (err.name === 'MongoError') {
+        next(new UniqueError('Email уже занят'));
       }
     });
 };

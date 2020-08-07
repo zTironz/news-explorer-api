@@ -18,9 +18,9 @@ const articleSchema = mongoose.Schema({
     minlength: 2,
   },
   date: {
-    type: Date,
+    type: String,
     required: true,
-    default: Date.now,
+    minlength: 2,
   },
   source: {
     type: String,
@@ -40,7 +40,7 @@ const articleSchema = mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => validator.isURL(v),
-      message: 'введите URL в формате: http://site.ru',
+      message: 'введите URL в формате: http://site.ru/test.jpg',
     },
   },
   owner: {
