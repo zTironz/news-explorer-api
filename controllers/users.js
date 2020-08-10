@@ -22,7 +22,7 @@ module.exports.getUser = (req, res, next) => {
 
 module.exports.createUser = (req, res, next) => {
   const {
-    name, email, password,
+    name, about, avatar, email, password,
   } = req.body;
   const regExp = /(?=^.{8,}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*/;
   if (!password) {
@@ -33,14 +33,16 @@ module.exports.createUser = (req, res, next) => {
   }
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({
-      name, email, password: hash,
+      name, about, avatar, email, password: hash,
     }))
     .then((user) => res.send({
-      name: user.name, email: user.email,
+      name: user.name, about: user.about, avatar: user.avatar, email: user.email,
     }))
     .catch((err) => {
-      if (err.name === 'MongoError') {
-        next(new UniqueError('Email уже занят'));
+      if (err.name === 'ValidationError') {
+        next(new UniqueError(`Данные некорректны: ${err.message}`));
+      } else {
+        next(new UniqueError({ message: 'Данный Email уже используется' }));
       }
     });
 };
