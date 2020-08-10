@@ -8,7 +8,7 @@ const { login, createUser } = require('./controllers/users');
 require('dotenv').config();
 const { auth } = require('./middlewares/auth');
 const NotFoundError = require('./errors/not-found-err');
-const ErrGlobal = require('./errors/globErr');
+const { errorsCenter } = require('./errors/globErr');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
@@ -44,6 +44,6 @@ app.use(errorLogger);
 
 app.use(errors());
 
-app.use(ErrGlobal);
+app.use(errorsCenter);
 
 app.listen(PORT);
