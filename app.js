@@ -6,14 +6,13 @@ const router = require('./routes/index');
 const { globErr } = require('./errors/globErr');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { PORT = 3000 } = process.env;
-
 const app = express();
+const { PORT, SERVER } = require('./config');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb://localhost:27017/diplomapi', {
+mongoose.connect(SERVER, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,

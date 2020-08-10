@@ -8,7 +8,7 @@ const Unauthorized = require('../errors/unauthorized');
 
 const regPass = require('../regex/passReg');
 
-const { NODE_ENV, JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET } = require('../config');
 
 module.exports.getUser = (req, res, next) => {
   User
