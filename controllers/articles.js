@@ -1,7 +1,7 @@
 const Article = require('../models/article');
 const BadRequest = require('../errors/bad-request');
 const NotFoundError = require('../errors/not-found-err');
-const Unauthorized = require('../errors/unauthorized');
+const RightsErr = require('../errors/rightsErr');
 
 const getArticles = (req, res, next) => {
   Article.find({ owner: req.user._id })
@@ -34,10 +34,10 @@ const deleteArticle = (req, res, next) => {
         throw new NotFoundError('Нет статьи');
       }
       if (article.owner.toString() !== req.user._id) {
-        throw new Unauthorized('Недостаточно прав');
+        throw new RightsErr('Недостаточно прав');
       }
       res.send({ data: article });
-      article.remove();
+      return article.remove();
     })
     .catch(next);
 };

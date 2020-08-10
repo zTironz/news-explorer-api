@@ -8,6 +8,7 @@ const { login, createUser } = require('./controllers/users');
 require('dotenv').config();
 const { auth } = require('./middlewares/auth');
 const NotFoundError = require('./errors/not-found-err');
+const ErrGlobal = require('./errors/globErr');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
@@ -43,12 +44,6 @@ app.use(errorLogger);
 
 app.use(errors());
 
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res.status(statusCode).send({
-    message: statusCode === 500 ? 'На сервере произошла ошибка' : message,
-  });
-  next();
-});
+app.use(ErrGlobal);
 
 app.listen(PORT);
