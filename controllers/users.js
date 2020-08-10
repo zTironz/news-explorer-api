@@ -4,6 +4,7 @@ const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');
 const UniqueError = require('../errors/unique-error');
 const BadRequest = require('../errors/bad-request');
+const Unauthorized = require('../errors/unauthorized');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -42,7 +43,7 @@ module.exports.createUser = (req, res, next) => {
       if (err.name === 'ValidationError') {
         next(new UniqueError(`Данные некорректны: ${err.message}`));
       } else {
-        next(new UniqueError({ message: 'Данный Email уже используется' }));
+        next(new UniqueError(`Данный Email уже используется: ${err.message}`));
       }
     });
 };
@@ -56,7 +57,7 @@ module.exports.login = (req, res, next) => {
         const token = jwt.sign({ _id: userObj._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
         res.send({ token });
       })
-      .catch(next);
+      .catch(() => next(new Unauthorized('Неправильная почта или пароль')));
   }
   throw new BadRequest('Необходимо ввести пароль');
 };
