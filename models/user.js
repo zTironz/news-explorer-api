@@ -26,8 +26,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// eslint-disable-next-line func-names
-userSchema.statics.findUserByCredentials = function (email, password) {
+function findUserByCredentials(email, password) {
   if (password) {
     return this.findOne({ email })
       .select('+password')
@@ -44,6 +43,7 @@ userSchema.statics.findUserByCredentials = function (email, password) {
           });
       });
   } return Promise.reject(new Error('Отсутствует пароль'));
-};
+}
 
+userSchema.statics.findUserByCredentials = findUserByCredentials;
 module.exports = mongoose.model('user', userSchema);
