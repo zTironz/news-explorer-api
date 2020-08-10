@@ -1,5 +1,6 @@
 const articleRouter = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
+const BadRequest = require('../errors/bad-request');
 
 const { getArticles, createArticle, deleteArticle } = require('../controllers/articles');
 const regUrl = require('../regex/urlReg');
@@ -20,7 +21,7 @@ articleRouter.post('/', celebrate({
 
 articleRouter.delete('/:articleId', celebrate({
   params: Joi.object().keys({
-    articleId: Joi.string().alphanum().length(24),
+    articleId: Joi.string().length(24).hex().error(() => new BadRequest('Неверный Id')),
   }),
 }), deleteArticle);
 
