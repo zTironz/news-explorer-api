@@ -6,6 +6,8 @@ const UniqueError = require('../errors/unique-error');
 const BadRequest = require('../errors/bad-request');
 const Unauthorized = require('../errors/unauthorized');
 
+const regPass = require('../regex/passReg');
+
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.getUser = (req, res, next) => {
@@ -25,11 +27,10 @@ module.exports.createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
-  const regExp = /(?=^.{8,}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*/;
   if (!password) {
     throw new BadRequest('Пароль не задан');
   }
-  if (!regExp.test(password)) {
+  if (!regPass.test(password)) {
     throw new BadRequest('Пароль должен быть не менее 8 символов и содержать цифры и латинские буквы');
   }
   bcrypt.hash(req.body.password, 10)
