@@ -10,20 +10,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const app = express();
 const { PORT, SERVER } = require('./config');
 
-const corsOptions = {
-  origin: [
-    'http://localhost:8080',
-    'https://ztironz.github.io',
-    'https://ztironz.github.io/news-explorer-frontend',
-    'https://api.ztironz.tk',
-    'http://api.ztironz.tk',
-    '84.201.140.38',
-  ],
-  credentials: true,
-  methods: 'GET, POST, DELETE',
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
